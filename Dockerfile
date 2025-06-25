@@ -18,8 +18,9 @@ ENV WS_PORT=9009
 
 # Create a script to handle port cleanup and startup
 RUN echo '#!/bin/sh\n\
-if lsof -ti:${WS_PORT}; then\n\
-    lsof -ti:${WS_PORT} | xargs kill -9 || true\n\
+pid=$(lsof -ti:${WS_PORT} 2>/dev/null)\n\
+if [ ! -z "$pid" ]; then\n\
+    kill -9 $pid 2>/dev/null || true\n\
 fi\n\
 exec npx --yes "@browsermcp/mcp@latest"\n\
 ' > /start.sh && chmod +x /start.sh
