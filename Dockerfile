@@ -4,19 +4,16 @@ FROM node:20-slim
 # Set working directory
 WORKDIR /app
 
-# Install required system tools
-RUN apt-get update && apt-get install -y \
-    git \
-    lsof \
-    procps \
-    && rm -rf /var/lib/apt/lists/*
-
 # Set environment variables
 ENV NODE_ENV=production
+ENV NPM_CONFIG_YES=true
+ENV FORCE_COLOR=1
+ENV NODE_OPTIONS="--no-warnings"
 
 # Expose necessary ports (if needed)
 # EXPOSE 9001 9002
 
-# Start the application with npx
-# Using --yes to skip prompts
-CMD ["npx", "@browsermcp/mcp@latest"] 
+# Start the application with npx in non-interactive mode
+ENTRYPOINT ["npx", "--yes"]
+CMD ["@browsermcp/mcp@latest"]
+
